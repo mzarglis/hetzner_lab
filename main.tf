@@ -29,5 +29,5 @@ data "hcloud_locations" "ds" {
 }
 
 output locations {
-    value = data.hcloud_locations.names
+    value = data.hcloud_locations.ds.names
 }
