@@ -1,34 +1,39 @@
-terraform {
-  required_providers {
-    hcloud = {
-      source = "hetznercloud/hcloud"
-      version = "1.32.2"
-    }
-  }
+resource "hcloud_server" "carbon" {
+  name         = var.name
+  image        = var.image
+  server_type  = var.server_type
+  location     = var.location
+  ssh_keys     = [hcloud_ssh_key.main.name]
+  firewall_ids = [hcloud_firewall.myfirewall.id]
 }
-
-provider "hcloud" {
-  # Configuration options
+resource "hcloud_rdns" "carbon" {
+  server_id  = hcloud_server.carbon.id
+  ip_address = hcloud_server.carbon.ipv4_address
+  dns_ptr    = var.name
 }
-
- resource "hcloud_server" "main" {
-  name        = "node1"
-  image       = "ubuntu-20.04"
-  server_type = "cpx11"
-  location    = "ash"
-  ssh_keys    = [hcloud_ssh_key.default.name]
-} 
-resource "hcloud_ssh_key" "default" {
+resource "hcloud_ssh_key" "main" {
   name       = "terraform"
-  public_key =  var.id_rsa_pub
+  public_key = var.id_rsa_pub
 }
 
-variable id_rsa_pub { default = ""}
+resource "hcloud_firewall" "main" {
+  name = "main"
+  rule {
+    direction = "in"
+    protocol  = "icmp"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
 
-output ipv4 {
-    value = hcloud_server.main.ipv4_address
-}
-
-output ipv6 {
-    value = hcloud_server.main.ipv6_address
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "22"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
 }
