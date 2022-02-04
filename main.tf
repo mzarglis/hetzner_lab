@@ -1,4 +1,17 @@
-# Configure the Hetzner Cloud Provider
+terraform {
+  required_providers {
+    hcloud = {
+      source = "hetznercloud/hcloud"
+      version = "1.32.2"
+    }
+  }
+}
+
+provider "hcloud" {
+  # Configuration options
+}
+
+
 provider "hcloud" { 
 }
 
