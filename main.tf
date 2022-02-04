@@ -16,7 +16,7 @@ resource "hcloud_server" "main" {
   image       = "ubuntu-20.04"
   server_type = "cpx11"
   location    = "us-east"
-  ssh_keys    = hcloud_ssh_key.default.id
+  ssh_keys    = [hcloud_ssh_key.default.name]
 }
 resource "hcloud_ssh_key" "default" {
   name       = "terraform"
