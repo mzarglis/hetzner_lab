@@ -11,10 +11,6 @@ provider "hcloud" {
   # Configuration options
 }
 
-
-provider "hcloud" { 
-}
-
 resource "hcloud_server" "main" {
   name        = "node1"
   image       = "ubuntu-20.04"
