@@ -20,7 +20,7 @@ resource "hcloud_server" "main" {
 }
 resource "hcloud_ssh_key" "default" {
   name       = "terraform"
-  public_key =  var.ssh_key_pub
+  public_key =  var.id_rsa_pub
 }
 
-variable ssh_key_pub {}
+variable id_rsa_pub { default = ""}
