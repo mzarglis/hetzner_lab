@@ -15,7 +15,7 @@ resource "hcloud_server" "main" {
   name        = "node1"
   image       = "ubuntu-20.04"
   server_type = "cpx11"
-  datacenter    = "us-east"
+  location    = "ash1"
   ssh_keys    = [hcloud_ssh_key.default.name]
 }
 resource "hcloud_ssh_key" "default" {
