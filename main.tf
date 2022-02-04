@@ -11,16 +11,23 @@ provider "hcloud" {
   # Configuration options
 }
 
-resource "hcloud_server" "main" {
+/* resource "hcloud_server" "main" {
   name        = "node1"
   image       = "ubuntu-20.04"
   server_type = "cpx11"
   location    = "ash1"
   ssh_keys    = [hcloud_ssh_key.default.name]
-}
+} */
 resource "hcloud_ssh_key" "default" {
   name       = "terraform"
   public_key =  var.id_rsa_pub
 }
 
 variable id_rsa_pub { default = ""}
+
+data "hcloud_locations" "ds" {
+}
+
+output locations {
+    value = hcloud_locations.ds.locations
+}
