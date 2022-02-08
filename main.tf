@@ -1,4 +1,16 @@
-resource "hcloud_server" "carbon" {
+locals {
+  hostname = "${var.name}.${data.cloudflare_zone.name}"
+}
+
+data "cloudflare_zone" "main" {
+  zone_id = var.cloudflare_zone_id
+}
+
+data "cloudflare_zone" "main" {
+  zone_id = var.cloudflare_zone_id
+}
+
+resource "hcloud_server" "main" {
   name         = var.name
   image        = var.image
   server_type  = var.server_type
@@ -6,10 +18,15 @@ resource "hcloud_server" "carbon" {
   ssh_keys     = [hcloud_ssh_key.main.name]
   firewall_ids = [hcloud_firewall.myfirewall.id]
 }
-resource "hcloud_rdns" "carbon" {
-  server_id  = hcloud_server.carbon.id
-  ip_address = hcloud_server.carbon.ipv4_address
-  dns_ptr    = var.name
+resource "hcloud_rdns" "ipv4" {
+  server_id  = hcloud_server.main.id
+  ip_address = hcloud_server.main.ipv4_address
+  dns_ptr    = local.hostname
+}
+resource "hcloud_rdns" "ipv6" {
+  server_id  = hcloud_server.main.id
+  ip_address = hcloud_server.main.ipv6_address
+  dns_ptr    = local.hostname
 }
 resource "hcloud_ssh_key" "main" {
   name       = "terraform"
@@ -36,4 +53,19 @@ resource "hcloud_firewall" "main" {
       "::/0"
     ]
   }
+}
+resource "cloudflare_record" "ipv4" {
+  zone_id = var.cloudflare_zone_id
+  name    = var.name
+  value   = hcloud_server.carbon.ipv4_address
+  type    = "A"
+  ttl     = 3600
+}
+
+resource "cloudflare_record" "ipv6" {
+  zone_id = var.cloudflare_zone_id
+  name    = var.name
+  value   = hcloud_server.carbon.ipv6_address
+  type    = "AAAA"
+  ttl     = 3600
 }
