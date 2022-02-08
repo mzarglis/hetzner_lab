@@ -1,5 +1,5 @@
 variable "name" {}
-variable "domain" {}
+#variable "domain" {}
 variable "image" {}
 variable "server_type" {}
 variable "location" {}
