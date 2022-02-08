@@ -12,7 +12,7 @@ resource "hcloud_server" "main" {
   server_type  = var.server_type
   location     = var.location
   ssh_keys     = [hcloud_ssh_key.main.name]
-  firewall_ids = [hcloud_firewall.myfirewall.id]
+  firewall_ids = [hcloud_firewall.main.id]
 }
 resource "hcloud_rdns" "ipv4" {
   server_id  = hcloud_server.main.id
