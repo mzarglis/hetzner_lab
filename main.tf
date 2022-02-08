@@ -1,5 +1,5 @@
 locals {
-  hostname = "${var.name}.${data.cloudflare_zone.name}"
+  hostname = "${var.name}.${data.cloudflare_zone.main.name}"
 }
 
 data "cloudflare_zone" "main" {
@@ -53,7 +53,7 @@ resource "hcloud_firewall" "main" {
 resource "cloudflare_record" "ipv4" {
   zone_id = var.cloudflare_zone_id
   name    = var.name
-  value   = hcloud_server.carbon.ipv4_address
+  value   = hcloud_server.main.ipv4_address
   type    = "A"
   ttl     = 3600
 }
@@ -61,7 +61,7 @@ resource "cloudflare_record" "ipv4" {
 resource "cloudflare_record" "ipv6" {
   zone_id = var.cloudflare_zone_id
   name    = var.name
-  value   = hcloud_server.carbon.ipv6_address
+  value   = hcloud_server.main.ipv6_address
   type    = "AAAA"
   ttl     = 3600
 }
