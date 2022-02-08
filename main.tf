@@ -6,10 +6,6 @@ data "cloudflare_zone" "main" {
   zone_id = var.cloudflare_zone_id
 }
 
-data "cloudflare_zone" "main" {
-  zone_id = var.cloudflare_zone_id
-}
-
 resource "hcloud_server" "main" {
   name         = var.name
   image        = var.image
